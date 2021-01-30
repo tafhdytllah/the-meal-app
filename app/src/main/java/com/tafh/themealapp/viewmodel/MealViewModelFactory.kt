@@ -1,4 +1,4 @@
-package com.tafh.themealapp
+package com.tafh.themealapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

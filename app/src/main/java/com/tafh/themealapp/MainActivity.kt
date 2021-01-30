@@ -2,51 +2,66 @@ package com.tafh.themealapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.tafh.themealapp.data.repository.MealRepository
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.tafh.themealapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MealViewModel
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this, MealViewModelFactory(MealRepository())).get(MealViewModel::class.java)
+        if (savedInstanceState == null) {
+            setupNavigation()
+        }
 
-        viewModel.categoryList.observe(this, Observer {
-            if (it.isSuccessful) {
-                val response = it.body()?.categories
-                Log.d("TAG", "response caregoryList = $response")
-            } else {
-                Toast.makeText(this, "${it.errorBody()}", Toast.LENGTH_SHORT).show()
+
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        setupNavigation()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
+
+    private fun setupNavigation() {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHosFragment) as NavHostFragment
+        navController = navHostFragment.findNavController()
+
+        setupActionBarWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination: NavDestination, _ ->
+            val toolBar = supportActionBar ?: return@addOnDestinationChangedListener
+            when(destination.id) {
+                R.id.listFragment -> {
+                    toolBar.apply {
+                        show()
+                        setDisplayShowTitleEnabled(true)
+
+                    }
+                }
+                else -> {
+                    toolBar.apply {
+                        show()
+                        setDisplayShowTitleEnabled(true)
+//                        setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+//                        setDisplayHomeAsUpEnabled(true)
+                    }
+                }
             }
 
-        })
-        viewModel.mealList.observe(this, Observer {
-            if (it.isSuccessful) {
-                val response = it.body()?.meals
-                Log.d("TAG", "response mealList = $response")
-            } else {
-                Toast.makeText(this, "${it.errorBody()}", Toast.LENGTH_SHORT).show()
-            }
-
-        })
-        viewModel.mealDetail.observe(this, Observer {
-            if (it.isSuccessful) {
-                val response = it.body()?.meals
-                Log.d("TAG", "response mealDetail = $response")
-            } else {
-                Toast.makeText(this, "${it.errorBody()}", Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        }
     }
 }
