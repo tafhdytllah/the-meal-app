@@ -45,19 +45,16 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination: NavDestination, _ ->
             val toolBar = supportActionBar ?: return@addOnDestinationChangedListener
             when(destination.id) {
-                R.id.listFragment -> {
+                R.id.ListFragment -> {
                     toolBar.apply {
                         show()
                         setDisplayShowTitleEnabled(true)
-
                     }
                 }
                 else -> {
                     toolBar.apply {
                         show()
                         setDisplayShowTitleEnabled(true)
-//                        setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-//                        setDisplayHomeAsUpEnabled(true)
                     }
                 }
             }

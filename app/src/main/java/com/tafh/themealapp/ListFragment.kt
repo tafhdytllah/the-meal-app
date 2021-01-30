@@ -8,17 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.tafh.themealapp.adapter.MealListAdapter
+import com.tafh.themealapp.data.model.Meal
 import com.tafh.themealapp.data.repository.MealRepository
 import com.tafh.themealapp.databinding.FragmentListBinding
 import com.tafh.themealapp.viewmodel.MealViewModel
 import com.tafh.themealapp.viewmodel.MealViewModelFactory
 
-class listFragment : Fragment() {
+class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var viewModel: MealViewModel
+
     private val mealAdapter = MealListAdapter()
 
     override fun onCreateView(
@@ -38,6 +42,14 @@ class listFragment : Fragment() {
             } else {
                 Log.d("LOG", "${it.errorBody()}")
             }
+        })
+
+        mealAdapter.setOnItemClickCallBack(object : MealListAdapter.OnItemClickCallBack {
+            override fun onItemClick(meal: Meal) {
+                val action = ListFragmentDirections.actionListFragmentToDetailFragment(meal)
+                findNavController().navigate(action)
+            }
+
         })
 
         return binding.root

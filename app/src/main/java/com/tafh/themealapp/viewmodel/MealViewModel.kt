@@ -23,8 +23,8 @@ class MealViewModel(private val repository: MealRepository) : ViewModel() {
         mealList.value = response
     }
 
-    fun getById() = viewModelScope.launch {
-        val response = repository.getById(52874)
+    fun getById(id: Int) = viewModelScope.launch {
+        val response = repository.getById(id)
         mealDetail.value = response
 
     }

@@ -3,20 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_meal"
-    app:startDestination="@id/listFragment">
+    app:startDestination="@id/ListFragment">
 
     <fragment
-        android:id="@+id/listFragment"
-        android:name="com.tafh.themealapp.listFragment"
+        android:id="@+id/ListFragment"
+        android:name="com.tafh.themealapp.ListFragment"
         android:label="List Seafood"
         tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/action_listFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/DetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.tafh.themealapp.detailFragment"
+        android:id="@+id/DetailFragment"
+        android:name="com.tafh.themealapp.DetailFragment"
         android:label="Detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="meal"
+            app:argType="com.tafh.themealapp.data.model.Meal" />
+    </fragment>
 </navigation>

@@ -12,17 +12,27 @@ class MealListAdapter : RecyclerView.Adapter<MealListAdapter.MealViewHolder>() {
 
     private var mealList = emptyList<Meal>()
 
+    private var onItemClickCallBack: OnItemClickCallBack? = null
+
+    fun setOnItemClickCallBack(onItemClickCallBack: OnItemClickCallBack) {
+        this.onItemClickCallBack = onItemClickCallBack
+    }
+
     inner class MealViewHolder(private val binding: ItemMealBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(meal: Meal) {
             binding.apply {
-                ivImage.load(meal.strMealThumb) {
+                ivItemMeal.load(meal.strMealThumb) {
                     crossfade(true)
                     crossfade(1000)
                     placeholder(R.drawable.ic_image_placeholder)
                     error(R.drawable.ic_no_image)
                 }
 
-                tvTitle.text = meal.strMeal
+                tvTitleItem.text = meal.strMeal
+
+                root.setOnClickListener {
+                    onItemClickCallBack?.onItemClick(meal)
+                }
             }
         }
 
@@ -43,6 +53,10 @@ class MealListAdapter : RecyclerView.Adapter<MealListAdapter.MealViewHolder>() {
             this.mealList = list
             notifyDataSetChanged()
         }
+    }
+
+    interface OnItemClickCallBack{
+        fun onItemClick(meal: Meal)
     }
 
 
